@@ -1,0 +1,27 @@
+---
+title: "COVID-19"
+author: "Viðar Ingason"
+date: "3/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(forecast)
+
+```
+
+
+```{r}
+df <- readxl::read_excel("smit.xlsx")
+
+ts_smit <- ts(df$smit)
+
+fit <- ets(ts_smit)
+
+fit %>% forecast(h = 5) %>% autoplot()
+
+```
+
