@@ -1,35 +1,18 @@
----
-title: "COVID-19"
-author: "Viðar Ingason"
-date: "3/8/2020"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(tidyverse)
 library(forecast)
 library(lubridate)
 
-```
 
-
-```{r}
 df <- readxl::read_excel("smit.xlsx")
 
-ts_smit <- ts(na.omit(df$iceland))
+ts_smit <- ts(na.omit(df$iceland))[-(1:5)]
 
-fit <- ets(ts_smit)
+fit <- ets(log(ts_smit))
 
-fc <- fit %>% forecast(h = 19)
-
-
-```
+fc <- fit %>% forecast(h = 10)
 
 
-
-```{r}
 
 idag <- today() - 1
 spa_date <- idag + days(19)
@@ -38,6 +21,3 @@ fc %>% autoplot() +
   labs(x = NULL, y = NULL,
        title = "Fjöldi smita og spá næstu 14 daga") +
   scale_x_date(breaks = (seq(as.Date("2020-02-28"), as.Date(spa_date), by = "1 week")))
-
-```
-
